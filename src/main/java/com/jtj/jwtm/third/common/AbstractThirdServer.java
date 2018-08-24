@@ -10,6 +10,9 @@ import java.util.Optional;
 /**
  * Created by MrTT (jiang.taojie@foxmail.com)
  * 2018/8/24.
+ *
+ * 抽象：第三方服务
+ *
  */
 @Service
 public abstract class AbstractThirdServer {

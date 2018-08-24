@@ -53,13 +53,7 @@ public class MainHandler {
         //第三方匹配
         PasswordServer multiServer = thirdServer.getMultiServerByName(name);
         if (multiServer != null) {
-            Optional<Long> userId = multiServer.getServer().getUserIdByThirdName(name);
-            if (!userId.isPresent()) {
-                return ServerResponse.status(HttpStatus.NOT_FOUND).body(ErrorResult.of(NO_USER_NOT_REGISTE).toBody());
-            }
-            User user = userRepository.findById(userId.get()).orElse(new User());
-            BeanUtils.copyProperties(user, info);
-            return ServerResponse.ok().body(fromObject(info));
+            return getLoginUserWithThird(multiServer, name);
         }
 
         //主用户名匹配
@@ -99,5 +93,33 @@ public class MainHandler {
                 .compact();
 
         return ServerResponse.ok().body(fromObject(jws));
+    }
+
+    public Mono<ServerResponse> getLoginUserWithThird(ServerRequest request) {
+
+        Optional<String> nameOpt = request.queryParam("name");
+        if (!nameOpt.isPresent()){
+            return ServerResponse.badRequest().body(ErrorResult.of(NO_NEED_PARAMS).toBody());
+        }
+        String name = nameOpt.get();
+
+        String serverName = request.pathVariable("server");
+        PasswordServer passwordServer = thirdServer.getPasswordServerByName(serverName);
+        if (passwordServer == null) {
+            return ServerResponse.badRequest().body(ErrorResult.of(UN_SUPPORT_THIRD_SERVER).toBody());
+        }
+
+        return getLoginUserWithThird(passwordServer, name);
+    }
+
+    private Mono<ServerResponse> getLoginUserWithThird(PasswordServer passwordServer, String name) {
+        LoginUserInfo info = new LoginUserInfo();
+        Optional<Long> userId = passwordServer.getServer().getUserIdByThirdName(name);
+        if (!userId.isPresent()) {
+            return ServerResponse.status(HttpStatus.NOT_FOUND).body(ErrorResult.of(NO_USER_NOT_REGISTE).toBody());
+        }
+        User user = userRepository.findById(userId.get()).orElse(new User());
+        BeanUtils.copyProperties(user, info);
+        return ServerResponse.ok().body(fromObject(info));
     }
 }

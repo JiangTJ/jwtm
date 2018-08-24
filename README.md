@@ -13,18 +13,12 @@ Json Web Token Microservice
 4. 危险操作（修改密码等），多重身份认证
 
 ## 设计
-
-- [文件]Auth-login模式.pof   
-https://pan.wps.cn/view/l/stcbd1i   
-
-- [文件]Auth-用户名.pom   
-https://pan.wps.cn/view/l/sohdf85   
-
-- [文件]Auth-匹配用户.pom   
-https://pan.wps.cn/view/l/sflp5bo   
-
-- [文件]Auth-邮件.pom   
-https://pan.wps.cn/view/l/s1g4c6m   
+流程设计文件
+- https://pan.wps.cn/view/l/stcbd1i   
+- https://pan.wps.cn/view/l/sohdf85   
+- https://pan.wps.cn/view/l/sflp5bo   
+- https://pan.wps.cn/view/l/s1g4c6m   
+- https://pan.wps.cn/view/l/sjt0sui   
 
 ## 关于
 

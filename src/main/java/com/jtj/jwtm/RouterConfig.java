@@ -8,8 +8,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import javax.annotation.Resource;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
+import static org.springframework.web.reactive.function.server.RouterFunctions.nest;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 /**
@@ -19,14 +19,20 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class RouterConfig {
 
-
     @Resource
     private MainHandler mainHandler;
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunctionA() {
+    public RouterFunction<ServerResponse> mainLoginRouter() {
         return route(GET("/login/user"), mainHandler::getLoginUser)
                 .andRoute(POST("/login/password"), mainHandler::loginWithPassword);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> passwordRouter() {
+        return nest(path("/{server}"),
+                route(GET("/login/user"), mainHandler::getLoginUserWithThird)
+        );
     }
 
 }

@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class PasswordServer {
 
-    private Type type;
+    private Type type;//密码登录方式
     private String pattern;//如果MUTLI模式，需要提供匹配正则
-    private AbstractThirdServer server;
+    private AbstractThirdServer server;//第三方服务实例
 
 
     public enum Type{
