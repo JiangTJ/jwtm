@@ -1,4 +1,4 @@
-package com.jtj.jwtm;
+package com.jtj.jwtm.model;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,11 +27,11 @@ public class ThirdParty {
     @Column(nullable = false)
     private Instant updateTime;
 
-    @Column(nullable = false, length = 64)
-    private String name;
-
     @Column(nullable = false)
-    private Short type;
+    private Long userId;
+
+    @Column(nullable = false, length = 8)
+    private String type;
 
     @Column(nullable = false, length = 128)
     private String value;

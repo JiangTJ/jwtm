@@ -1,4 +1,4 @@
-package com.jtj.jwtm;
+package com.jtj.jwtm.model;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
