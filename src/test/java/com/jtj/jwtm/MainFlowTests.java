@@ -20,6 +20,7 @@ public class MainFlowTests extends AbstractJwmtWebTests {
     @Test
     public void testGetPublicUser(){
 
+        //成功
         LoginUserInfo info = new LoginUserInfo();
         info.setId(1L);
         info.setName("admin");
@@ -37,6 +38,19 @@ public class MainFlowTests extends AbstractJwmtWebTests {
                                 fieldWithPath("name").description("用户名称")
                         )
                 ));
+
+        //失败(可注册的用户名)
+        super.webTestClient.get().uri("/public/user?name={name}","nonameindb")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody().jsonPath("$.code","20001");
+
+        //失败(不可注册的用户名)
+        super.webTestClient.get().uri("/public/user?name={name}","aano@bb.cc")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody().jsonPath("$.code","20002");
+
     }
 
     @Test
