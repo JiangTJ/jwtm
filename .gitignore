@@ -23,3 +23,7 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+
+### Ignore dev file ###
+/src/main/resources/application-dev.properties

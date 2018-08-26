@@ -1,4 +1,4 @@
-package com.jtj.jwtm.third.common;
+package com.jtj.jwtm.third.base;
 
 import com.jtj.jwtm.repository.ThirdPartyRepository;
 import com.jtj.jwtm.repository.UserRepository;

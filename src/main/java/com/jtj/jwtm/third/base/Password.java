@@ -1,4 +1,4 @@
-package com.jtj.jwtm.third.common;
+package com.jtj.jwtm.third.base;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

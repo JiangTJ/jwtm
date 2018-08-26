@@ -1,0 +1,36 @@
+== 通用用户名密码登录流程
+
+=== 流程
+目前，首版的登录流程如下，目前处在开发过程中，后期如果发现不合理或者不安全的地方，随时会对其调整
+
+image::main-flow-v1.png[]
+
+=== 接口
+
+==== 获取用户公共信息
+我们需要根据用户名，去匹配确认用户存不存在。如果存在，则返回用户的公共信息，用于给用户确认，该账户是否是其注册的账户。如果不存在，根据该用户名是否可注册确定是否进入注册流程。
+
+*Curl请求*
+include::{snippets}/public-user/curl-request.adoc[]
+
+*相应结果*
+include::{snippets}/public-user/http-response.adoc[]
+
+*Parameters请求参数*
+include::{snippets}/public-user/request-parameters.adoc[]
+
+*ResponseFields响应字段*
+include::{snippets}/public-user/response-fields.adoc[]
+
+==== 用户密码登录
+当用户确认，该用户名匹配的账户是其注册的账户时，通过用户ID和密码，获取用户的Token。
+
+*Curl请求*
+include::{snippets}/login-password/curl-request.adoc[]
+
+*相应结果*
+include::{snippets}/login-password/http-response.adoc[]
+
+*Parameters请求参数*
+include::{snippets}/login-password/request-parameters.adoc[]
+

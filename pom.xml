@@ -23,6 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <jjwt.version>0.10.5</jjwt.version>
+        <restdocs.version>2.0.2.RELEASE</restdocs.version>
     </properties>
 
     <dependencies>
@@ -82,6 +83,8 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -92,6 +95,13 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-webtestclient</artifactId>
+            <version>${restdocs.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -99,6 +109,43 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.3</version>
+                <configuration>
+                    <sourceDocumentName>index.adoc</sourceDocumentName>
+                    <doctype>book</doctype>
+                    <attributes>
+                        <allow-uri-read>true</allow-uri-read>
+                        <attribute-missing>warn</attribute-missing>
+                    </attributes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-docs</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html5</backend>
+                            <sourceHighlighter>highlight.js</sourceHighlighter>
+                            <attributes>
+                                <toc2 />
+                                <docinfo>shared-head</docinfo>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework.restdocs</groupId>
+                        <artifactId>spring-restdocs-asciidoctor</artifactId>
+                        <version>${restdocs.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

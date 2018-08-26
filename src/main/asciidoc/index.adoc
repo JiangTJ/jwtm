@@ -1,0 +1,15 @@
+= 接口文档
+MrTT and Deng LiPing;
+:toc2:
+:toc-title: 目录
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:docinfo: shared-head
+:imagesdir: images
+
+
+include::readme.adoc[]
+
+include::main-flow.adoc[]
+

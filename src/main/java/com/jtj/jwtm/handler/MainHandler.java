@@ -5,7 +5,7 @@ import com.jtj.jwtm.dto.ErrorResult;
 import com.jtj.jwtm.dto.LoginUserInfo;
 import com.jtj.jwtm.model.User;
 import com.jtj.jwtm.repository.UserRepository;
-import com.jtj.jwtm.third.common.PasswordServer;
+import com.jtj.jwtm.third.base.PasswordServer;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -23,7 +23,8 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.jtj.jwtm.dto.ErrorResult.Code.*;
+import static com.jtj.jwtm.dto.ErrorResult.Code.NO_NEED_PARAMS;
+import static com.jtj.jwtm.dto.ErrorResult.Code.NO_USER_AND_REGISTE;
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 /**
@@ -37,11 +38,13 @@ public class MainHandler {
     private UserRepository userRepository;
     @Resource
     private ThirdServer thirdServer;
+    @Resource
+    private ThirdPasswordHandler thirdHandler;
 
     /**
-     * 密码模式：获取用户ID
+     * 获取公开的用户信息
      */
-    public Mono<ServerResponse> getLoginUser(ServerRequest request) {
+    public Mono<ServerResponse> getPublicUser(ServerRequest request) {
         LoginUserInfo info = new LoginUserInfo();
 
         Optional<String> nameOpt = request.queryParam("name");
@@ -53,7 +56,7 @@ public class MainHandler {
         //第三方匹配
         PasswordServer multiServer = thirdServer.getMultiServerByName(name);
         if (multiServer != null) {
-            return getLoginUserWithThird(multiServer, name);
+            return thirdHandler.getLoginUserWithThird(multiServer, name);
         }
 
         //主用户名匹配
@@ -95,31 +98,4 @@ public class MainHandler {
         return ServerResponse.ok().body(fromObject(jws));
     }
 
-    public Mono<ServerResponse> getLoginUserWithThird(ServerRequest request) {
-
-        Optional<String> nameOpt = request.queryParam("name");
-        if (!nameOpt.isPresent()){
-            return ServerResponse.badRequest().body(ErrorResult.of(NO_NEED_PARAMS).toBody());
-        }
-        String name = nameOpt.get();
-
-        String serverName = request.pathVariable("server");
-        PasswordServer passwordServer = thirdServer.getPasswordServerByName(serverName);
-        if (passwordServer == null) {
-            return ServerResponse.badRequest().body(ErrorResult.of(UN_SUPPORT_THIRD_SERVER).toBody());
-        }
-
-        return getLoginUserWithThird(passwordServer, name);
-    }
-
-    private Mono<ServerResponse> getLoginUserWithThird(PasswordServer passwordServer, String name) {
-        LoginUserInfo info = new LoginUserInfo();
-        Optional<Long> userId = passwordServer.getServer().getUserIdByThirdName(name);
-        if (!userId.isPresent()) {
-            return ServerResponse.status(HttpStatus.NOT_FOUND).body(ErrorResult.of(NO_USER_NOT_REGISTE).toBody());
-        }
-        User user = userRepository.findById(userId.get()).orElse(new User());
-        BeanUtils.copyProperties(user, info);
-        return ServerResponse.ok().body(fromObject(info));
-    }
 }

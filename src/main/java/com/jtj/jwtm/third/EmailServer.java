@@ -1,9 +1,9 @@
 package com.jtj.jwtm.third;
 
-import com.jtj.jwtm.third.common.AbstractThirdServer;
-import com.jtj.jwtm.third.common.Password;
-import com.jtj.jwtm.third.common.PasswordServer;
-import com.jtj.jwtm.third.common.ThirdType;
+import com.jtj.jwtm.third.base.AbstractThirdServer;
+import com.jtj.jwtm.third.base.Password;
+import com.jtj.jwtm.third.base.PasswordServer;
+import com.jtj.jwtm.third.base.ThirdType;
 import org.springframework.stereotype.Service;
 
 /**
