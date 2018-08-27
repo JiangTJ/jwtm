@@ -2,10 +2,12 @@ package com.jtj.jwtm.common;
 
 import com.jtj.jwtm.dto.PublicUserInfo;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.crypto.SecretKey;
@@ -26,11 +28,20 @@ public class JwtAuthService {
     private SecretKey key;
 
     public SecretKey getKey(){
+
         if (key != null) {
             return key;
         }
-        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(config.getSecret()));
+
+        String secret = config.getSecret();
+        if (StringUtils.isEmpty(secret)) {
+            key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+            return key;
+        }
+
+        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
         return key;
+
     }
 
     /**
