@@ -2,7 +2,7 @@ package com.jtj.jwtm;
 
 import com.jtj.jwtm.base.AbstractJwmtWebTests;
 import com.jtj.jwtm.common.JacksonUtils;
-import com.jtj.jwtm.dto.LoginUserInfo;
+import com.jtj.jwtm.dto.PublicUserInfo;
 import org.junit.Test;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -20,7 +20,7 @@ public class ThirdPasswordFlowTests extends AbstractJwmtWebTests {
     @Test
     public void testGetThirdPublicUser(){
 
-        LoginUserInfo info = new LoginUserInfo();
+        PublicUserInfo info = new PublicUserInfo();
         info.setId(1L);
         info.setName("admin");
         super.webTestClient.get().uri("/{server}/public/user?name={name}","email","aa@bb.cc")

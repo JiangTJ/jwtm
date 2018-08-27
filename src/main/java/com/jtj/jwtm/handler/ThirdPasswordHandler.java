@@ -1,12 +1,11 @@
 package com.jtj.jwtm.handler;
 
 import com.jtj.jwtm.ThirdServer;
-import com.jtj.jwtm.dto.ErrorResult;
-import com.jtj.jwtm.dto.LoginUserInfo;
+import com.jtj.jwtm.common.ErrorResult;
+import com.jtj.jwtm.dto.PublicUserInfo;
 import com.jtj.jwtm.model.User;
 import com.jtj.jwtm.repository.UserRepository;
 import com.jtj.jwtm.third.base.PasswordServer;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -16,7 +15,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.Optional;
 
-import static com.jtj.jwtm.dto.ErrorResult.Code.*;
+import static com.jtj.jwtm.common.ErrorResult.Code.*;
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 /**
@@ -52,14 +51,12 @@ public class ThirdPasswordHandler {
     }
 
     public Mono<ServerResponse> getLoginUserWithThird(PasswordServer passwordServer, String name) {
-        LoginUserInfo info = new LoginUserInfo();
         Optional<Long> userId = passwordServer.getServer().getUserIdByThirdName(name);
         if (!userId.isPresent()) {
             return ServerResponse.status(HttpStatus.NOT_FOUND).body(ErrorResult.of(NO_USER_NOT_REGISTE).toBody());
         }
         User user = userRepository.findById(userId.get()).orElse(new User());
-        BeanUtils.copyProperties(user, info);
-        return ServerResponse.ok().body(fromObject(info));
+        return ServerResponse.ok().body(fromObject(PublicUserInfo.fromUser(user)));
     }
 
 }

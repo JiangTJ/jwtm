@@ -1,15 +1,12 @@
 package com.jtj.jwtm.handler;
 
 import com.jtj.jwtm.ThirdServer;
-import com.jtj.jwtm.dto.ErrorResult;
-import com.jtj.jwtm.dto.LoginUserInfo;
+import com.jtj.jwtm.common.ErrorResult;
+import com.jtj.jwtm.common.JwtAuthService;
+import com.jtj.jwtm.dto.PublicUserInfo;
 import com.jtj.jwtm.model.User;
 import com.jtj.jwtm.repository.UserRepository;
 import com.jtj.jwtm.third.base.PasswordServer;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -17,14 +14,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
-import javax.crypto.SecretKey;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Optional;
 
-import static com.jtj.jwtm.dto.ErrorResult.Code.NO_NEED_PARAMS;
-import static com.jtj.jwtm.dto.ErrorResult.Code.NO_USER_AND_REGISTE;
+import static com.jtj.jwtm.common.ErrorResult.Code.NO_NEED_PARAMS;
+import static com.jtj.jwtm.common.ErrorResult.Code.NO_USER_AND_REGISTE;
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 /**
@@ -40,12 +33,13 @@ public class MainHandler {
     private ThirdServer thirdServer;
     @Resource
     private ThirdPasswordHandler thirdHandler;
+    @Resource
+    private JwtAuthService jwtAuthService;
 
     /**
      * 获取公开的用户信息
      */
     public Mono<ServerResponse> getPublicUser(ServerRequest request) {
-        LoginUserInfo info = new LoginUserInfo();
 
         Optional<String> nameOpt = request.queryParam("name");
         if (!nameOpt.isPresent()){
@@ -64,8 +58,7 @@ public class MainHandler {
         if (!dbUser.isPresent()) {
             return ServerResponse.status(HttpStatus.NOT_FOUND).body(ErrorResult.of(NO_USER_AND_REGISTE).toBody());
         }
-        BeanUtils.copyProperties(dbUser.get(), info);
-        return ServerResponse.ok().body(fromObject(info));
+        return ServerResponse.ok().body(fromObject(PublicUserInfo.fromUser(dbUser.get())));
     }
 
     /**
@@ -84,18 +77,9 @@ public class MainHandler {
             return ServerResponse.notFound().build();
         }
 
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode("cwgedvgbfdsvfdvdbdgvfdbsegtrhbytndfvgeavgzsfeswr"));
+        String token = jwtAuthService.generateToken(PublicUserInfo.fromUser(user));
 
-        String jws = Jwts.builder()
-                .signWith(key)
-                .setSubject(user.getName())
-                .setIssuer("Jwtm")
-                .setIssuedAt(new Date())
-                .setAudience("pass")
-                .setExpiration(Date.from(Instant.now().plusSeconds(Duration.ofHours(10).getSeconds())))
-                .compact();
-
-        return ServerResponse.ok().body(fromObject(jws));
+        return ServerResponse.ok().body(fromObject(token));
     }
 
 }

@@ -47,7 +47,7 @@ public class ThirdServer {
             ThirdType thirdType = tClass.getDeclaredAnnotation(ThirdType.class);
             thirdServer.setType(thirdType.value());
         }catch(Exception ignored) {
-            log.warn(tClass.getName() + "未发现注解ThirdType，请添加后重试！");
+            log.warn(tClass.getName() + ":未发现注解ThirdType，请添加后重试！");
             return;
         }
 
@@ -78,12 +78,16 @@ public class ThirdServer {
             passwordServerMap.put(thirdServer.getType(),passwordServer);
 
             //如果通用方式，则保存在队列，方便通用登录时匹配用户名
-            if (type == PasswordServer.Type.MUTLI || !StringUtils.isEmpty(pattern)) {
-                multiPasswordServerList.add(passwordServer);
+            if (type == PasswordServer.Type.MUTLI) {
+                if (!StringUtils.isEmpty(pattern)) {
+                    multiPasswordServerList.add(passwordServer);
+                } else {
+                    log.warn(tClass.getName() + ":Multi模式请添加匹配规则！");
+                }
             }
 
         }catch(Exception ignored) {
-            log.info(tClass.getName() + "未发现注解Password，不启用密码模式登录！");
+            log.info(tClass.getName() + ":未发现注解Password，不启用密码模式登录！");
         }
     }
 

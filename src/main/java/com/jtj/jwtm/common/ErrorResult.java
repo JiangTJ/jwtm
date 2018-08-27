@@ -1,4 +1,4 @@
-package com.jtj.jwtm.dto;
+package com.jtj.jwtm.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

@@ -2,7 +2,7 @@ package com.jtj.jwtm;
 
 import com.jtj.jwtm.base.AbstractJwmtWebTests;
 import com.jtj.jwtm.common.JacksonUtils;
-import com.jtj.jwtm.dto.LoginUserInfo;
+import com.jtj.jwtm.dto.PublicUserInfo;
 import org.junit.Test;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -21,7 +21,7 @@ public class MainFlowTests extends AbstractJwmtWebTests {
     public void testGetPublicUser(){
 
         //成功
-        LoginUserInfo info = new LoginUserInfo();
+        PublicUserInfo info = new PublicUserInfo();
         info.setId(1L);
         info.setName("admin");
         super.webTestClient.get().uri("/public/user?name={name}","admin")
