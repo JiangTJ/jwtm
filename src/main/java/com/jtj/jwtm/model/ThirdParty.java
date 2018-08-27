@@ -2,6 +2,7 @@ package com.jtj.jwtm.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -12,6 +13,7 @@ import java.time.Instant;
  */
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class ThirdParty {
 
     @Id
