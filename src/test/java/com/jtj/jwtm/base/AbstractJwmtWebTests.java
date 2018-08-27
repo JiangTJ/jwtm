@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -14,7 +15,7 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public abstract class AbstractJwmtWebTests {
+public abstract class AbstractJwmtWebTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
     private ApplicationContext context;

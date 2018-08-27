@@ -7,12 +7,15 @@ import javax.persistence.*;
 import java.time.Instant;
 
 /**
- * Created by jiang (jiang.taojie@foxmail.com)
- * 2018/8/23 23:57 End.
+ * Created by MrTT (jiang.taojie@foxmail.com)
+ * 2018/8/27.
+ *
+ * todo 记录操作历史
+ *
  */
 @Data
 @Entity
-public class ThirdParty {
+public class OperationRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +25,4 @@ public class ThirdParty {
     @Column(nullable = false, updatable = false)
     private Instant createTime;
 
-    @Column(nullable = false)
-    private Long userId;
-
-    @Column(nullable = false, length = 8)
-    private String type;
-
-    @Column(nullable = false, length = 128)
-    private String value;
 }

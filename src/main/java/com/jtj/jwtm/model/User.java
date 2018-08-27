@@ -1,8 +1,7 @@
 package com.jtj.jwtm.model;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -19,13 +18,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreationTimestamp
+    @CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createTime;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private Instant updateTime;
 
     @Column(unique = true, nullable = false, length = 64)
     private String name;
