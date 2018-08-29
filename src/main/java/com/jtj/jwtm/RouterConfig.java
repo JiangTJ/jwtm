@@ -1,6 +1,7 @@
 package com.jtj.jwtm;
 
 import com.jtj.jwtm.handler.MainHandler;
+import com.jtj.jwtm.handler.ThirdIDCodeHandler;
 import com.jtj.jwtm.handler.ThirdPasswordHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,9 @@ public class RouterConfig {
     @Resource
     private MainHandler mainHandler;
     @Resource
-    private ThirdPasswordHandler thirdHandler;
+    private ThirdPasswordHandler thirdPasswordHandler;
+    @Resource
+    private ThirdIDCodeHandler thirdIDCodeHandler;
 
     @Bean
     public RouterFunction<ServerResponse> indexRouter() {
@@ -42,7 +45,18 @@ public class RouterConfig {
     @Bean
     public RouterFunction<ServerResponse> passwordRouter() {
         return nest(path("/{server}"),
-                route(GET("/public/user"), thirdHandler::getPublicUserWithThird)
+                route(GET("/public/user"), thirdPasswordHandler::getPublicUserWithThird)
+        );
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> idCodeRouter() {
+        return nest(path("/{server}"),
+                route(GET("/id/code"), thirdIDCodeHandler::sendCode)
+                        //url地址携带token时，通过get方式
+                        .andRoute(GET("/id/verify"), thirdIDCodeHandler::verifyCode)
+                        //其他情况下建议post方式
+                        .andRoute(POST("/id/verify"), thirdIDCodeHandler::verifyCode)
         );
     }
 

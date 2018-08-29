@@ -1,10 +1,10 @@
 package com.jtj.jwtm.third;
 
-import com.jtj.jwtm.third.base.AbstractThirdServer;
-import com.jtj.jwtm.third.base.Password;
-import com.jtj.jwtm.third.base.PasswordServer;
-import com.jtj.jwtm.third.base.ThirdType;
+import com.jtj.jwtm.third.base.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 /**
  * Created by MrTT (jiang.taojie@foxmail.com)
@@ -20,5 +20,16 @@ import org.springframework.stereotype.Service;
         type = PasswordServer.Type.MUTLI,
         pattern = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$"
 )
-public class EmailServer extends AbstractThirdServer {
+public class EmailServer extends AbstractThirdServer implements IDCodeServer {
+
+    @Override
+    public Mono<ServerResponse> sendCode(String thirdName) {
+        return ServerResponse.ok().build();
+    }
+
+    @Override
+    public Mono<ServerResponse> verifyCode(ServerRequest request) {
+        return ServerResponse.ok().build();
+    }
+
 }

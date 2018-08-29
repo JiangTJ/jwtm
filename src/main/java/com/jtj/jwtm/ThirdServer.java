@@ -1,10 +1,7 @@
 package com.jtj.jwtm;
 
 import com.jtj.jwtm.third.EmailServer;
-import com.jtj.jwtm.third.base.AbstractThirdServer;
-import com.jtj.jwtm.third.base.Password;
-import com.jtj.jwtm.third.base.PasswordServer;
-import com.jtj.jwtm.third.base.ThirdType;
+import com.jtj.jwtm.third.base.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -27,6 +24,8 @@ public class ThirdServer {
 
     private List<PasswordServer> multiPasswordServerList = new ArrayList<>();
     private Map<String,PasswordServer> passwordServerMap = new HashMap<>();
+    private Map<String,IDCodeServer> idCodeServerMap = new HashMap<>();
+    private Map<String,OAuth2Server> oauth2ServerMap = new HashMap<>();
 
     @Resource
     private EmailServer emailServer;
@@ -53,6 +52,10 @@ public class ThirdServer {
 
         //初始化密码模式
         initPasswordServer(thirdServer);
+        //初始化临时Code模式
+        initIDCodeServer(thirdServer);
+        //初始化OAuth2.0模式
+        initOAuth2Server(thirdServer);
 
     }
 
@@ -109,4 +112,25 @@ public class ThirdServer {
     public PasswordServer getPasswordServerByName(String serverName) {
         return passwordServerMap.getOrDefault(serverName,null);
     }
+
+    private void initIDCodeServer(AbstractThirdServer thirdServer) {
+        if (thirdServer instanceof IDCodeServer) {
+            idCodeServerMap.put(thirdServer.getType(), (IDCodeServer) thirdServer);
+        }
+    }
+
+    public IDCodeServer getIdCodeServerByName(String serverName) {
+        return idCodeServerMap.getOrDefault(serverName,null);
+    }
+
+    private void initOAuth2Server(AbstractThirdServer thirdServer) {
+        if (thirdServer instanceof OAuth2Server) {
+            oauth2ServerMap.put(thirdServer.getType(), (OAuth2Server) thirdServer);
+        }
+    }
+
+    public Map<String, OAuth2Server> getOAuth2ServerMap() {
+        return oauth2ServerMap;
+    }
+
 }
