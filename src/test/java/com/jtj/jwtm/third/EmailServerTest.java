@@ -1,4 +1,4 @@
-package com.jtj.jwtm;
+package com.jtj.jwtm.third;
 
 import com.jtj.jwtm.base.AbstractJwmtWebTests;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class EmailServerTest extends AbstractJwmtWebTests {
 
     @Test
     public void testSendCode(){
-        super.webTestClient.get().uri("/{server}/id/code?name={name}","email","116749895@qq.com")
+        super.webTestClient.get().uri("/{server}/id/code?name={name}","email","jiang.taojie@foxmail.com")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

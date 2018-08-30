@@ -16,6 +16,8 @@ public class PublicUserInfo {
 
     private Long id;
     private String name;
+    private String nick;
+    private String description;
 
     public static PublicUserInfo fromUser(User user){
         PublicUserInfo info = new PublicUserInfo();

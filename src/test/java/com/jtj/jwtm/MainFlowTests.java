@@ -24,6 +24,7 @@ public class MainFlowTests extends AbstractJwmtWebTests {
         PublicUserInfo info = new PublicUserInfo();
         info.setId(1L);
         info.setName("admin");
+        info.setNick("管理员");
         super.webTestClient.get().uri("/public/user?name={name}","admin")
                 .exchange()
                 .expectStatus().isOk()
@@ -35,7 +36,9 @@ public class MainFlowTests extends AbstractJwmtWebTests {
                         ),
                         responseFields(
                                 fieldWithPath("id").description("用户ID"),
-                                fieldWithPath("name").description("用户名称")
+                                fieldWithPath("name").description("用户名称"),
+                                fieldWithPath("nick").description("昵称"),
+                                fieldWithPath("description").description("简介")
                         )
                 ));
 
