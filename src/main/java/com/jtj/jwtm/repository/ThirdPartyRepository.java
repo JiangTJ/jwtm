@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public interface ThirdPartyRepository extends JpaRepository<ThirdParty,Long> {
 
-    @Query("select userId from ThirdParty where type = :type and value = :value")
-    Optional<Long> findUserIdByThirdName(@Param("type") String type, @Param("value") String value);
+    @Query("select userId from ThirdParty where type = :type and name = :name")
+    Optional<Long> findUserIdByThirdName(@Param("type") String type, @Param("name") String name);
 
 }

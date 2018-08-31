@@ -24,18 +24,27 @@ public class User {
     @Column(nullable = false, updatable = false)
     private Instant createTime;
 
+    //用户名
     @Column(unique = true, nullable = false, length = 64)
     private String name;
 
-    @Column
-    private String nick;
-
-    @Column
-    private Short sex;
-
+    //密码
     @Column(nullable = false, updatable = false)
     private String password;
 
+    //昵称
+    @Column(length = 64)
+    private String nick;
+
+    //性别
+    @Column
+    private Short sex;
+
+    //头像
+    @Column
+    private String avatar;
+
+    //性别
     @Column
     private String description;
 

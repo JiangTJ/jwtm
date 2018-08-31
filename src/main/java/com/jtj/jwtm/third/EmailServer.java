@@ -1,6 +1,9 @@
 package com.jtj.jwtm.third;
 
 import com.jtj.jwtm.common.ErrorResult;
+import com.jtj.jwtm.common.SecureRandomUtils;
+import com.jtj.jwtm.model.ThirdAuthCode;
+import com.jtj.jwtm.repository.ThirdAuthCodeRepository;
 import com.jtj.jwtm.third.base.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -33,6 +36,8 @@ public class EmailServer extends AbstractThirdServer implements IDCodeServer {
 
     @Resource
     private JavaMailSender mailSender;
+    @Resource
+    private ThirdAuthCodeRepository thirdAuthCodeRepository;
     @Value("${spring.mail.username}")
     private String fromMail;
 
@@ -42,12 +47,14 @@ public class EmailServer extends AbstractThirdServer implements IDCodeServer {
         if (!Pattern.matches(password.pattern(), thirdName)){
             return ServerResponse.badRequest().body(ErrorResult.of(UN_SUPPORT_USER_NAME).toBody());
         }
+        String numberCode = SecureRandomUtils.getStringNumber(6);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromMail);
         message.setTo(thirdName);
         message.setSubject("验证码");
-        message.setText("123456");
+        message.setText(numberCode);
         mailSender.send(message);
+        thirdAuthCodeRepository.save(ThirdAuthCode.of(getType(),thirdName,numberCode));
         return ServerResponse.ok().build();
     }
 
