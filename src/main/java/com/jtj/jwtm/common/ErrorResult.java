@@ -28,6 +28,7 @@ public class ErrorResult {
     public enum Code{
         OK("0","成功"),
         NO_NEED_PARAMS("10000","必填参数未传"),
+        UN_ACHIEVE_METHOD("10001","未实现的方法"),
         NO_USER_AND_REGISTE("20001","不存在该用户，但该用户名可注册"),
         NO_USER_NOT_REGISTE("20002","不存在该用户，该用户名不可注册"),
         UN_SUPPORT_USER_NAME("20003","不支持的用户名"),

@@ -16,6 +16,9 @@ import static com.jtj.jwtm.common.ErrorResult.Code.UN_SUPPORT_THIRD_SERVER;
 /**
  * Created by MrTT (jiang.taojie@foxmail.com)
  * 2018/8/29.
+ *
+ * 解析验证临时token 请求，分发到对应的第三方服务
+ *
  */
 @Service
 public class ThirdIDCodeHandler {
@@ -23,9 +26,6 @@ public class ThirdIDCodeHandler {
     @Resource
     private ThirdServer thirdServer;
 
-    /**
-     * 解析发送临时token请求，分发到对应的第三方服务
-     */
     public Mono<ServerResponse> sendCode(ServerRequest request) {
         Optional<String> name = request.queryParam("name");
         if (!name.isPresent()) {
@@ -39,9 +39,15 @@ public class ThirdIDCodeHandler {
         return idCodeServer.sendCode(name.get());
     }
 
-    /**
-     * 解析验证临时token 请求，分发到对应的第三方服务
-     */
+    public Mono<ServerResponse> sendRedirectUri(ServerRequest request) {
+        String serverName = request.pathVariable("server");
+        IDCodeServer idCodeServer = thirdServer.getIdCodeServerByName(serverName);
+        if (idCodeServer == null) {
+            return ServerResponse.badRequest().body(ErrorResult.of(UN_SUPPORT_THIRD_SERVER).toBody());
+        }
+        return idCodeServer.sendRedirectUri(request);
+    }
+
     public Mono<ServerResponse> verifyCode(ServerRequest request) {
         String serverName = request.pathVariable("server");
         IDCodeServer idCodeServer = thirdServer.getIdCodeServerByName(serverName);

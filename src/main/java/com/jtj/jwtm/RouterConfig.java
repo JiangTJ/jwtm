@@ -53,6 +53,7 @@ public class RouterConfig {
     public RouterFunction<ServerResponse> idCodeRouter() {
         return nest(path("/{server}"),
                 route(GET("/id/code"), thirdIDCodeHandler::sendCode)
+                        .andRoute(GET("/id/redirect"), thirdIDCodeHandler::sendRedirectUri)
                         //url地址携带token时，通过get方式
                         .andRoute(GET("/id/verify"), thirdIDCodeHandler::verifyCode)
                         //其他情况下建议post方式

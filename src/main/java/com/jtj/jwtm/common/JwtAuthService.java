@@ -13,6 +13,8 @@ import javax.annotation.Resource;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by MrTT (jiang.taojie@foxmail.com)
@@ -54,8 +56,28 @@ public class JwtAuthService {
                 .setSubject(user.getName())
                 .setIssuer("Jwtm")
                 .setIssuedAt(new Date())
-                .setAudience("pass")
+                .setAudience("all")
                 .setExpiration(Date.from(Instant.now().plusSeconds(config.getTimeout().getSeconds())))
+                .compact();
+
+    }
+
+    /**
+     * 创建token
+     */
+    public String generateCode(String thirdName, String code) {
+
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("code", code);
+
+        return Jwts.builder()
+                .signWith(getKey())
+                .setSubject(thirdName)
+                .setIssuer("Jwtm")
+                .setIssuedAt(new Date())
+                .setAudience("login")
+                .setClaims(claims)
+                .setExpiration(Date.from(Instant.now().plusSeconds(config.getTemporaryTokenTimeout().getSeconds())))
                 .compact();
 
     }

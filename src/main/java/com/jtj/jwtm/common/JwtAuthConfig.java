@@ -21,4 +21,6 @@ public class JwtAuthConfig {
     private Duration timeout = Duration.ofHours(10L);//配置token有效期
     private Duration maxTimeout = Duration.ofDays(30);//最大到期时间，用于限制最长token有效期
 
+    private Duration temporaryTokenTimeout = Duration.ofMinutes(10L);//配置token有效期
+
 }
